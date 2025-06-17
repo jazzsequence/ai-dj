@@ -20,7 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function bootstrap() {
 	include_once plugin_dir_path( __FILE__ ) . 'inc/api-handler.php';
+	include_once plugin_dir_path( __FILE__ ) . 'inc/auth.php';
 
+	Auth\bootstrap();
 	add_action('wp_ajax_generate_playlist', 'generate_playlist_ajax');
 }
 
