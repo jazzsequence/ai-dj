@@ -1,6 +1,8 @@
 <?php
 
 namespace jazzsequence\AIDJ\ApiHandler;
+use WP_Error;
+use jazzsequence\AIDJ\Auth;
 
 function get_spotify_user_top_tracks($access_token) {
 	$user_id = get_current_user_id();
@@ -34,7 +36,7 @@ function generate_playlist_from_openai($user_top_tracks, $user_prompt) {
 }
 
 function spotify_api_get($user_id, $endpoint) {
-	$token = get_valid_spotify_access_token($user_id);
+	$token = Auth\get_valid_spotify_access_token($user_id);
 	if (!$token) return new WP_Error('spotify_auth', 'Invalid or expired token.');
 
 	$response = wp_remote_get("https://api.spotify.com/v1/{$endpoint}", [
