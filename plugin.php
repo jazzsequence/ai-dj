@@ -29,14 +29,17 @@ function generate_playlist_ajax() {
 		wp_send_json_error('Missing prompt');
 	}
 
-	if ( ! defined( 'AIDJ_SPOTIFY_API_KEY' ) || ! defined( 'AIDJ_OPENAI_API_KEY' ) ) {
-		wp_send_json_error('API keys not set');
+	if ( ! defined( 'AIDJ_OPENAI_API_KEY' ) ) {
+		wp_send_json_error('OpenAI API key not set');
+	}
+	if ( ! defined( 'AIDJ_SPOTIFY_CLIENT_ID' ) || ! defined( 'AIDJ_SPOTIFY_CLIENT_SECRET' ) ) {
+		wp_send_json_error('Spotify Client ID or Secret not set');
 	}
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_send_json_error('Unauthorized');
 	}
 
-	$user_top_tracks = ApiHandler\get_spotify_user_top_tracks(AIDJ_SPOTIFY_API_KEY);
+	$user_top_tracks = ApiHandler\get_spotify_user_top_tracks(AIDJ_SPOTIFY_CLIENT_ID);
 	$playlist = ApiHandler\generate_playlist_from_openai($user_top_tracks, sanitize_text_field($_POST['user_prompt']));
 
 	wp_send_json_success($playlist);
